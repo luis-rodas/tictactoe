@@ -582,7 +582,7 @@ const Game = () => {
   };
 
   const ConnectWithPeerPlayer = async (message) => {
-    handleConnect(message.playerId)
+    handleConnect(message.join)
   };
 
   const ListenerPlayerData = useCallback(async () => {
@@ -598,11 +598,10 @@ const Game = () => {
         }),
       });
       const result = await response.json();
-      console.log(result)
       if(Array.isArray(result) && result.length !== 0) {
         stopListenerPlayer();
         result.forEach((item) => {
-          ConnectWithPeerPlayer(item.message)
+          ConnectWithPeerPlayer(item.content)
         });
       }
     } catch (err) {}
