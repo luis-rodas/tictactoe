@@ -11,13 +11,13 @@ import {
 import { GameContext } from "../game/GameContext";
 
 export const Connect = () => {
-  const { connectDialog, handleConnectDialogClose, handleConnect } =
+  const { connectDialog, handleConnectDialogClose, handleConnect, handleConnectRoom } =
     useContext(GameContext);
   const input = useRef();
 
   return (
     <Dialog open={connectDialog} onClose={() => handleConnectDialogClose()}>
-      <DialogTitle>Connect to peer</DialogTitle>
+      <DialogTitle>Connect to room</DialogTitle>
       <DialogContent>
         <DialogContentText sx={{ pb: 2 }}>
           Enter the ID of the user your wish to connect with.
@@ -35,7 +35,7 @@ export const Connect = () => {
           Cancel
         </Button>
         <Button
-          onClick={() => handleConnect(input.current.value)}
+          onClick={() => handleConnectRoom(input.current.value)}
           color="primary"
         >
           Connect
