@@ -489,10 +489,7 @@ const Game = () => {
    * 
    */
 
-  const handleConnectRoom = async (id) => {
-    // hide the connect dialog
-    setConnectDialog(false);
-
+  const handleConnectToRoom = async (roomID) => {
     try {
       const response = await fetch(SEND_MESSAGE_TO_ROOM, {
         method: 'POST', 
@@ -501,8 +498,29 @@ const Game = () => {
         },
         body: JSON.stringify({
           who : player.id,
-          message : {playerId:player.id},
-          code : id,
+          message : {join:player.id},
+          code : roomID,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error('Wrong request');
+      }
+      startListenerPlayer();
+    } catch (err) {
+    }
+  };
+  
+  const SendMyPeerIDtoPlayers = async (remotePlayerId, roomID) => {
+    try {
+      const response = await fetch(SEND_MESSAGE_TO_PLAYERS, {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify({
+          receiver : remotePlayerId,
+          message : {join:player.id},
+          code : roomID,
         }),
       });
       if (!response.ok) {
@@ -511,7 +529,7 @@ const Game = () => {
     } catch (err) {
     }
   };
-  
+
   const ConnectWithRemotePlayer = async (messageContent) => {
     console.log('message');
     console.log(messageContent);
@@ -535,7 +553,7 @@ const Game = () => {
       if(Array.isArray(result) && result.length !== 0) {
         stopListenerRoom();
         result.forEach((item) => {
-          ConnectWithRemotePlayer(item.content)
+          SendMyPeerIDtoPlayers(item.owner, roomCode)
         });
       }
     } catch (err) {}
@@ -576,7 +594,7 @@ const Game = () => {
         },
         body: JSON.stringify({
           code : roomCode,
-          owner: 'Player1',
+          owner: player.id,
         }),
       });
       const result = await response.json();
@@ -616,7 +634,7 @@ const Game = () => {
   return (
     <>
       <GameProvider
-        values={{ connectDialog, handleConnectDialogClose, handleConnect, handleConnectRoom }}
+        values={{ connectDialog, handleConnectDialogClose, handleConnect, handleConnectToRoom }}
       >
         <Connect />
       </GameProvider>
