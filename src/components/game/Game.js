@@ -476,7 +476,6 @@ const Game = () => {
   
         const responseData = await response.json(); // 
         setRoomCode(responseData.code)
-        startListenerRoom();
       } catch (err) {
       }
     };
@@ -621,7 +620,7 @@ const Game = () => {
       >
         <Connect />
       </GameProvider>
-      <GameProvider values={{ shareDialog, handleShareDialogClose, player, roomCode }}>
+      <GameProvider values={{ shareDialog, handleShareDialogClose, player, roomCode, startListenerRoom, shouldContinueListenRoom }}>
         <Share />
       </GameProvider>
       <GameProvider

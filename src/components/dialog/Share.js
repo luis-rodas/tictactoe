@@ -13,7 +13,7 @@ import { GameContext } from "../game/GameContext";
 import { theme } from "../../Theme";
 
 export const Share = () => {
-  const { shareDialog, handleShareDialogClose, player, roomCode } =
+  const { shareDialog, handleShareDialogClose, player, roomCode, startListenerRoom, shouldContinueListenRoom } =
     useContext(GameContext);
   const [id, setId] = useState("");
   const [code, setCode] = useState("");
@@ -26,6 +26,13 @@ export const Share = () => {
   useEffect(() => {
     setCode(roomCode);
   }, [roomCode]);
+
+  // Start listener for room messages
+  useEffect(() => {
+    if(shareDialog && !shouldContinueListenRoom){
+      startListenerRoom()
+    }
+  }, [shareDialog]);
 
   return (
     <Dialog open={shareDialog} onClose={() => handleShareDialogClose()}>

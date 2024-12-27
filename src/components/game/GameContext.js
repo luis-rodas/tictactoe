@@ -29,5 +29,7 @@ GameProvider.propTypes = {
     rejectDialog: PropTypes.bool,
     roomCode: PropTypes.string,
     handleConnectRoom: PropTypes.func,
+    startListenerRoom: PropTypes.func,
+    shouldContinueListenRoom: PropTypes.bool,
   }).isRequired,
 };
