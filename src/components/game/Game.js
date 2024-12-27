@@ -9,6 +9,10 @@ import { Connect, Share, Rematch, Reject } from "../dialog";
 
 const CONMUNICATON_URL_SERVER = "http://localhost:8000/api"
 const CREATE_ROOM_API = `${CONMUNICATON_URL_SERVER}/create_session`
+const SEND_MESSAGE_TO_ROOM = `${CONMUNICATON_URL_SERVER}/add_message_as`
+const GET_MESSAGE_FROM_ROOM = `${CONMUNICATON_URL_SERVER}/get_messages_for_session_owner`
+const SEND_MESSAGE_TO_PLAYERS = `${CONMUNICATON_URL_SERVER}/add_messages_as_session_owner`
+const GET_MESSAGE_TO_PLAYERS = `${CONMUNICATON_URL_SERVER}/get_messages_for`
 
 const Game = () => {
   /**
