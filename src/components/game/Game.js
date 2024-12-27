@@ -458,6 +458,7 @@ const Game = () => {
 
   // const classes = useStyles();
   
+  //////////////////////////////////////////////  New Stuff
   // Initialize chat room
   useEffect(() => {
     const createRoomCode = async () => {
@@ -475,14 +476,57 @@ const Game = () => {
   
         const responseData = await response.json(); // 
         setRoomCode(responseData.code)
+        startListenerRoom();
       } catch (err) {
       }
     };
     createRoomCode(); // 
-
+    return () => {};
   }, []); // 
+  const ListenerRoomData = useCallback(async () => {
+    try {
+      const response = await fetch(GET_MESSAGE_FROM_ROOM, {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify({
+          code : roomCode,
+        }),
+      });
+      const result = await response.json();
+      console.log(result)
+      if(Array.isArray(result) && result.length !== 0) {
+        stopListenerRoom();
+        result.forEach((item) => {
+          SendPeerIDToPlayers(item.owner)
+        });
+      }
+    } catch (err) {}
+  });
 
+  useEffect(() => {
+    // Si shouldContinue es verdadero, entonces iniciamos el intervalo
+    let intervalId;
 
+    if (shouldContinueListenRoom) {
+      intervalId = setInterval(() => {
+        ListenerRoomData();
+      }, 1000); 
+    }
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [ListenerRoomData, shouldContinueListenRoom]); 
+
+  const stopListenerRoom = () => {
+    setShouldContinueListenRoom(false);
+  };
+
+  const startListenerRoom = () => {
+    setShouldContinueListenRoom(true);
+  };
   return (
     <>
       <GameProvider
