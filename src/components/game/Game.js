@@ -483,6 +483,43 @@ const Game = () => {
     createRoomCode(); // 
     return () => {};
   }, []); // 
+
+
+  /**
+   * Handle connect to room
+   * 
+   */
+
+  const handleConnectRoom = async (id) => {
+    // hide the connect dialog
+    setConnectDialog(false);
+
+    try {
+      const response = await fetch(SEND_MESSAGE_TO_ROOM, {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify({
+          who : player.id,
+          message : {playerId:player.id},
+          code : id,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error('Wrong request');
+      }
+    } catch (err) {
+    }
+  };
+  
+  const ConnectWithRemotePlayer = async (messageContent) => {
+    console.log('message');
+    console.log(messageContent);
+    const playerId = messageContent.playerId;
+    handleConnect(playerId)
+  };
+
   const ListenerRoomData = useCallback(async () => {
     try {
       const response = await fetch(GET_MESSAGE_FROM_ROOM, {
@@ -499,14 +536,13 @@ const Game = () => {
       if(Array.isArray(result) && result.length !== 0) {
         stopListenerRoom();
         result.forEach((item) => {
-          SendPeerIDToPlayers(item.owner)
+          ConnectWithRemotePlayer(item.content)
         });
       }
     } catch (err) {}
   });
 
   useEffect(() => {
-    // Si shouldContinue es verdadero, entonces iniciamos el intervalo
     let intervalId;
 
     if (shouldContinueListenRoom) {
@@ -527,10 +563,61 @@ const Game = () => {
   const startListenerRoom = () => {
     setShouldContinueListenRoom(true);
   };
+
+  const ConnectWithPeerPlayer = async (message) => {
+    handleConnect(message.playerId)
+  };
+
+  const ListenerPlayerData = useCallback(async () => {
+    try {
+      const response = await fetch(GET_MESSAGE_TO_PLAYERS, {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify({
+          code : roomCode,
+          owner: 'Player1',
+        }),
+      });
+      const result = await response.json();
+      console.log(result)
+      if(Array.isArray(result) && result.length !== 0) {
+        stopListenerPlayer();
+        result.forEach((item) => {
+          ConnectWithPeerPlayer(item.message)
+        });
+      }
+    } catch (err) {}
+  });
+
+  useEffect(() => {
+    let intervalId;
+
+    if (shouldContinueListenPlayer) {
+      intervalId = setInterval(() => {
+        ListenerPlayerData();
+      }, 1000); 
+    }
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [ListenerPlayerData, shouldContinueListenPlayer]); 
+
+  const stopListenerPlayer = () => {
+    setShouldContinueListenPlayer(false);
+  };
+
+  const startListenerPlayer = () => {
+    setShouldContinueListenPlayer(true);
+  };
+
+  //////////////////////////////////////////////  End's New Stuff
   return (
     <>
       <GameProvider
-        values={{ connectDialog, handleConnectDialogClose, handleConnect }}
+        values={{ connectDialog, handleConnectDialogClose, handleConnect, handleConnectRoom }}
       >
         <Connect />
       </GameProvider>
