@@ -11,7 +11,7 @@ import {
 import { GameContext } from "../game/GameContext";
 
 export const Connect = () => {
-  const { connectDialog, handleConnectDialogClose, handleConnect, handleConnectRoom } =
+  const { connectDialog, handleConnectDialogClose, handleConnect, handleConnectToRoom } =
     useContext(GameContext);
   const input = useRef();
 
@@ -35,7 +35,7 @@ export const Connect = () => {
           Cancel
         </Button>
         <Button
-          onClick={() => handleConnectRoom(input.current.value)}
+          onClick={() => handleConnectToRoom(input.current.value)}
           color="primary"
         >
           Connect
