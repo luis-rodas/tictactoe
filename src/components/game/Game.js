@@ -39,6 +39,8 @@ const Game = () => {
    * State
    */
   const [roomCode, setRoomCode] = useState("")
+  const [shouldContinueListenRoom, setShouldContinueListenRoom] = useState(false);
+  const [shouldContinueListenPlayer, setShouldContinueListenPlayer] = useState(false);
   const [state, setState] = useState(states.NOT_CONNECTED);
   const [player, setPlayer] = useState({
     peer: new Peer(),
