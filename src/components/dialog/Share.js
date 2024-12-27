@@ -13,14 +13,19 @@ import { GameContext } from "../game/GameContext";
 import { theme } from "../../Theme";
 
 export const Share = () => {
-  const { shareDialog, handleShareDialogClose, player } =
+  const { shareDialog, handleShareDialogClose, player, roomCode } =
     useContext(GameContext);
   const [id, setId] = useState("");
+  const [code, setCode] = useState("");
   const input = useRef();
 
   useEffect(() => {
     setId(player.id);
   }, [player]);
+
+  useEffect(() => {
+    setCode(roomCode);
+  }, [roomCode]);
 
   return (
     <Dialog open={shareDialog} onClose={() => handleShareDialogClose()}>
@@ -28,14 +33,14 @@ export const Share = () => {
         <DialogTitle>Share</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ mb: 2 }}>
-            Share this ID with anyone you want to connect with.
+            Share this Code with anyone you want to connect with.
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
             label="ID"
             fullWidth
-            value={id}
+            value={code}
             onChange={(e) => setId(e.target.value)}
             InputProps={{
               readOnly: true,

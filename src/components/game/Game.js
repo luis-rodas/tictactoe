@@ -34,6 +34,7 @@ const Game = () => {
   /**
    * State
    */
+  const [roomCode, setRoomCode] = useState("")
   const [state, setState] = useState(states.NOT_CONNECTED);
   const [player, setPlayer] = useState({
     peer: new Peer(),
@@ -451,7 +452,7 @@ const Game = () => {
 
   // const classes = useStyles();
   
-  // Initilize chat room
+  // Initialize chat room
   useEffect(() => {
     const createRoomCode = async () => {
       try {
@@ -467,7 +468,7 @@ const Game = () => {
         }
   
         const responseData = await response.json(); // 
-        console.log(responseData)
+        setRoomCode(responseData.code)
       } catch (err) {
       }
     };
@@ -483,7 +484,7 @@ const Game = () => {
       >
         <Connect />
       </GameProvider>
-      <GameProvider values={{ shareDialog, handleShareDialogClose, player }}>
+      <GameProvider values={{ shareDialog, handleShareDialogClose, player, roomCode }}>
         <Share />
       </GameProvider>
       <GameProvider

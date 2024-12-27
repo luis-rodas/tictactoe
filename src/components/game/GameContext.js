@@ -27,5 +27,6 @@ GameProvider.propTypes = {
     handlePlayerRematchAccept: PropTypes.func,
     handlePlayerRematchReject: PropTypes.func,
     rejectDialog: PropTypes.bool,
+    roomCode: PropTypes.string,
   }).isRequired,
 };
