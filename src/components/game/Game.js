@@ -7,6 +7,9 @@ import Board from "../Board";
 import Status from "../Status";
 import { Connect, Share, Rematch, Reject } from "../dialog";
 
+const CONMUNICATON_URL_SERVER = "http://localhost:8000/api"
+const CREATE_ROOM_API = `${CONMUNICATON_URL_SERVER}/create_session`
+
 const Game = () => {
   /**
    * Game states
@@ -447,6 +450,31 @@ const Game = () => {
   ]);
 
   // const classes = useStyles();
+  
+  // Initilize chat room
+  useEffect(() => {
+    const createRoomCode = async () => {
+      try {
+        const response = await fetch(CREATE_ROOM_API, {
+          method: 'POST', 
+          headers: {
+            'Content-Type': 'application/json', 
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error('Wrong request');
+        }
+  
+        const responseData = await response.json(); // 
+        console.log(responseData)
+      } catch (err) {
+      }
+    };
+    createRoomCode(); // 
+
+  }, []); // 
+
 
   return (
     <>
