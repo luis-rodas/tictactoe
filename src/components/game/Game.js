@@ -530,13 +530,6 @@ const Game = () => {
     }
   };
 
-  const ConnectWithRemotePlayer = async (messageContent) => {
-    console.log('message');
-    console.log(messageContent);
-    const playerId = messageContent.playerId;
-    handleConnect(playerId)
-  };
-
   const ListenerRoomData = useCallback(async () => {
     try {
       const response = await fetch(GET_MESSAGE_FROM_ROOM, {
