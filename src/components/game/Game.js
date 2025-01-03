@@ -622,6 +622,16 @@ const Game = () => {
     setShouldContinueListenPlayer(true);
   };
 
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const code = queryParams.get('code') ?? '';
+    console.log(player.id);
+    if(code !== '' && player.id && player.id !== '') {
+      handleConnectToRoom(code)
+    }
+    return () => {
+    };
+  }, [player]); 
   //////////////////////////////////////////////  End's New Stuff
   return (
     <>
